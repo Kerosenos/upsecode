@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Editar Perfil</title>
+    <style>
+        .edit-container {
+            max-width: 500px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 8px;
+            box-sizing: border-box;
+        }
+        button {
+            padding: 10px 20px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="edit-container">
+        <h1>Editar Perfil</h1>
+        <form method="POST" action="/actualizar_perfil" enctype="multipart/form-data">
+            <div class="form-group">
+                <label>Nombre de usuario:</label>
+                <input type="text" name="username" value="{{ username }}" required>
+            </div>
+
+            <div class="form-group">
+                <label>Foto de perfil:</label>
+                <input type="file" name="foto">
+            </div>
+
+            <div class="form-group">
+                <label>Descripción:</label>
+                <textarea name="descripcion">{{ descripcion }}</textarea>
+            </div>
+
+            <div class="form-group">
+                <label>Año de nacimiento:</label>
+                <input type="number" name="año_nacimiento" value="{{ año_nacimiento }}">
+            </div>
+
+            <div class="form-group">
+                <label>Carrera:</label>
+                <input type="text" name="carrera" value="{{ carrera }}">
+            </div>
+
+            <div class="form-group">
+                <label>Año de la carrera:</label>
+                <select name="año_carrera">
+                    <option value="1" {% if año_carrera == 1 %}selected{% endif %}>1er año</option>
+                    <option value="2" {% if año_carrera == 2 %}selected{% endif %}>2do año</option>
+                    <option value="3" {% if año_carrera == 3 %}selected{% endif %}>3er año</option>
+                    <option value="4" {% if año_carrera == 4 %}selected{% endif %}>4to año</option>
+                    <option value="5" {% if año_carrera == 5 %}selected{% endif %}>5to año</option>
+                </select>
+            </div>
+
+            <div class="form-group">
+                <label>Lenguajes de programación (separados por comas):</label>
+                <input type="text" name="lenguajes" value="{{ lenguajes }}">
+            </div>
+
+            <button type="submit">Guardar cambios</button>
+        </form>
+    </div>
+</body>
+</html>

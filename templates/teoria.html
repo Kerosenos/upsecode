@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Teoría - Nivel {{ nivel }}</title>
+    <style>
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        .btn {
+            padding: 10px 20px;
+            background: #4CAF50;
+            color: white;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    <div class="container">
+        <h1>{{ leccion.titulo }}</h1>
+        <div class="content">
+            {{ leccion.contenido.explicacion|safe }}
+        </div>
+        
+        <a href="{{ url_for('practica', nivel=nivel) }}" class="btn">
+            Comenzar Ejercicios de Práctica
+        </a>
+    </div>
+</body>
+</html>

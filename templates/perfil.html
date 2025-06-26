@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Perfil</title>
+    <style>
+        .profile-container {
+            margin-top: 60px;
+            max-width: 600px;
+            margin: 0 auto;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+        }
+        .profile-img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin: 20px auto;
+            display: block;
+        }
+        .profile-info {
+            margin: 20px 0;
+        }
+        .profile-info p {
+            margin: 10px 0;
+        }
+        .edit-btn {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    <div class="profile-container">
+        <h1>Perfil de {{ username }}</h1>
+        
+        <img src="{{ url_for('static', filename='fotos/' + foto) }}" class="profile-img" alt="Foto de perfil">
+        
+        <div class="profile-info">
+            <h2>Nivel actual: {{ nivel }}</h2>
+            <p><strong>Descripción:</strong> {{ descripcion or "No especificado" }}</p>
+            <p><strong>Año de nacimiento:</strong> {{ año_nacimiento or "No especificado" }}</p>
+            <p><strong>Carrera:</strong> {{ carrera or "No especificado" }}</p>
+            <p><strong>Año de carrera:</strong> {{ año_carrera or "1" }}</p>
+            <p><strong>Lenguajes:</strong> {{ lenguajes or "No especificados" }}</p>
+        </div>
+
+        <a href="{{ url_for('editar_perfil') }}" class="edit-btn">Editar Perfil</a>
+        <br>
+        <a href="{{ url_for('logout') }}">Cerrar sesión</a>
+    </div>
+</body>
+</html>

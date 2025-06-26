@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resultado del Cuestionario</title>
+    <style>
+        body { 
+            font-family: Arial, sans-serif; 
+            text-align: center; 
+            margin-top: 50px; 
+        }
+        .message { 
+            color: #d9534f; 
+            margin: 20px 0; 
+            font-size: 18px;
+        }
+        .btn { 
+            background: #5bc0de; 
+            color: white; 
+            padding: 10px 20px; 
+            text-decoration: none;
+            border-radius: 5px;
+            display: inline-block;
+            margin-top: 20px;
+            font-size: 16px;
+        }
+        .progress-container {
+            width: 80%;
+            margin: 20px auto;
+            background-color: #f3f3f3;
+            border-radius: 5px;
+            height: 20px;
+        }
+        .progress-bar {
+            height: 100%;
+            background-color: #4CAF50;
+            border-radius: 5px;
+            text-align: center;
+            line-height: 20px;
+            color: white;
+            font-size: 14px;
+        }
+        h2 {
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <h2>Alcanzaste el nivel {{ nivel }}/20</h2>
+    
+    <div class="progress-container">
+        <div class="progress-bar" style="width: {{ (nivel/20)*100 }}%">
+            {{ (nivel/20)*100 }}%
+        </div>
+    </div>
+    
+    <div class="message">{{ mensaje }}</div>
+    
+    <a href="{{ url_for('login') }}" class="btn">Ir a Login</a>
+</body>
+</html>

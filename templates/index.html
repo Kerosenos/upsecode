@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>UpseCode</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <h1>UpseCode</h1>
+    <a href="{{ url_for('register') }}"><button>Registrarse</button></a>
+    <a href="{{ url_for('login') }}"><button>Iniciar Sesión</button></a>
+</body>
+</html>

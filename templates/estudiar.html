@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Estudiar</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .nivel-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            gap: 15px;
+            margin-top: 30px;
+        }
+        .nivel {
+            height: 120px;
+            border-radius: 10px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            text-align: center;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .disponible {
+            background-color: #4CAF50;
+            color: white;
+        }
+        .bloqueado {
+            background-color: #f44336;
+            color: white;
+            cursor: not-allowed;
+        }
+        .completado {
+            background-color: #2196F3;
+            color: white;
+        }
+        .evaluacion-pendiente {
+            background-color: #FFC107;
+            color: black;
+        }
+        .nivel:hover:not(.bloqueado) {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        }
+        .nivel-titulo {
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        .nivel-actual {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 18px;
+            color: #555;
+        }
+        .btn-evaluacion {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            padding: 10px;
+            background-color: #FF9800;
+            color: white;
+            text-align: center;
+            border-radius: 5px;
+            text-decoration: none;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    <h1>Selecciona un nivel para estudiar</h1>
+    <div class="nivel-actual">Tu nivel actual: {{ nivel_actual }}</div>
+    
+    {% if practica_completa and nivel_actual < 20 %}
+        <a href="{{ url_for('evaluacion', nivel=nivel_actual) }}" class="btn-evaluacion">
+            ¡Realizar Evaluación del Nivel {{ nivel_actual }}!
+        </a>
+    {% endif %}
+    
+    <div class="nivel-container">
+        {% for nivel, data in lecciones.items() %}
+            <div class="nivel 
+                {% if nivel == nivel_actual + 1 and not practica_completa %}disponible
+                {% elif nivel == nivel_actual + 1 and practica_completa %}evaluacion-pendiente
+                {% elif nivel <= nivel_actual %}completado
+                {% else %}bloqueado{% endif %}"
+                {% if nivel <= nivel_actual + 1 %}onclick="location.href='{{ url_for('teoria', nivel=nivel) }}'"{% endif %}>
+                
+                Nivel {{ nivel }}
+                <div class="nivel-titulo">{{ data.titulo }}</div>
+                
+                {% if nivel <= nivel_actual %}
+                    <div style="font-size:12px;">✓ Completado</div>
+                {% elif nivel == nivel_actual + 1 and practica_completa %}
+                    <div style="font-size:12px;">¡Hacer Evaluación!</div>
+                {% elif nivel == nivel_actual + 1 %}
+                    <div style="font-size:12px;">Disponible</div>
+                {% else %}
+                    <div style="font-size:12px;">Bloqueado</div>
+                {% endif %}
+            </div>
+        {% endfor %}
+    </div>
+</body>
+</html>

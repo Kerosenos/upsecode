@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Amigos</title>
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            height: 100vh;
+        }
+        #lista-usuarios {
+            width: 30%;
+            background: #f0f0f0;
+            padding: 10px;
+            overflow-y: auto;
+        }
+        #chat-container {
+            width: 70%;
+            padding: 10px;
+            display: flex;
+            flex-direction: column;
+        }
+        #chat-mensajes {
+            flex-grow: 1;
+            overflow-y: auto;
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        #chat-form {
+            display: flex;
+        }
+        #chat-form input {
+            flex-grow: 1;
+            padding: 8px;
+        }
+        #chat-form button {
+            padding: 8px 15px;
+            background: #4CAF50;
+            color: white;
+            border: none;
+        }
+        .usuario {
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+            cursor: pointer;
+        }
+        .usuario:hover {
+            background: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    <div id="lista-usuarios">
+        <h3>Usuarios</h3>
+        {% for usuario in usuarios %}
+            <div class="usuario" onclick="cargarChat({{ usuario.id }}, '{{ usuario.username|escapejs }}')">
+                {{ usuario.username }}
+            </div>
+        {% endfor %}
+    </div>
+
+    <div id="chat-container">
+        <h3 id="chat-titulo">Selecciona un usuario para chatear</h3>
+        <div id="chat-mensajes"></div>
+        <form id="chat-form" onsubmit="enviarMensaje(event)">
+            <input type="hidden" id="destinatario-id">
+            <input type="text" id="mensaje-texto" placeholder="Escribe un mensaje..." required>
+            <button type="submit">Enviar</button>
+        </form>
+    </div>
+
+    <script>
+        const socket = io();
+        let destinatarioId = null;
+
+        socket.on('recibir_mensaje', (data) => {
+            if (data.destinatario_id === destinatarioId || data.remitente_id === destinatarioId) {
+                const chat = document.getElementById('chat-mensajes');
+                const esMio = data.remitente_id === parseInt("{{ session['user_id'] }}");
+                
+                chat.innerHTML += `
+                    <div style="text-align: ${esMio ? 'right' : 'left'}; color: ${esMio ? 'blue' : 'green'}">
+                        <strong>${data.username}:</strong> ${data.mensaje}
+                    </div>
+                `;
+                chat.scrollTop = chat.scrollHeight;
+            }
+        });
+
+        function cargarChat(id, username) {
+            destinatarioId = id;
+            document.getElementById('chat-titulo').textContent = `Chat con ${username}`;
+            document.getElementById('destinatario-id').value = id;
+            
+            fetch(`/obtener_mensajes?destinatario_id=${id}`)
+                .then(response => response.json())
+                .then(mensajes => {
+                    const chat = document.getElementById('chat-mensajes');
+                    chat.innerHTML = '';
+                    mensajes.forEach(msg => {
+                        const esMio = msg.remitente_id === parseInt("{{ session['user_id'] }}");
+                        chat.innerHTML += `
+                            <div style="text-align: ${esMio ? 'right' : 'left'}; color: ${esMio ? 'blue' : 'green'}">
+                                <strong>${msg.username}:</strong> ${msg.mensaje}
+                            </div>
+                        `;
+                    });
+                    chat.scrollTop = chat.scrollHeight;
+                });
+        }
+
+        function enviarMensaje(event) {
+            event.preventDefault();
+            const texto = document.getElementById('mensaje-texto').value.trim();
+            
+            if (!destinatarioId || !texto) {
+                alert("Escribe un mensaje válido");
+                return;
+            }
+
+            socket.emit('nuevo_mensaje', {
+                destinatario_id: destinatarioId,
+                mensaje: texto
+            });
+
+            document.getElementById('mensaje-texto').value = '';
+        }
+    </script>
+</body>
+</html>

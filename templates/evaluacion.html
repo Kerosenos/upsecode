@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Evaluación - Nivel {{ nivel }}</title>
+    <style>
+        .info-box {
+            background: #2196F3;
+            color: white;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        .btn-finish {
+            background: #4CAF50;
+            color: white;
+            padding: 12px 25px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    <div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+        <div class="info-box">
+            <h2>Evaluación Final</h2>
+            <p>Resuelve al menos 6 de estos 8 ejercicios para pasar al siguiente nivel.</p>
+        </div>
+        
+        <form method="POST">
+            {% for ejercicio in leccion.contenido.ejercicios_evaluacion %}
+            <div style="margin-bottom: 30px; padding: 20px; border: 1px solid #ddd; border-radius: 5px;">
+                <h3>Ejercicio {{ loop.index }}</h3>
+                <p>{{ ejercicio }}</p>
+                <textarea name="ejercicio_{{ loop.index }}" 
+                          style="width: 100%; min-height: 100px; padding: 10px;" 
+                          required></textarea>
+            </div>
+            {% endfor %}
+            
+            <button type="submit" class="btn-finish">Enviar Evaluación</button>
+        </form>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div style="margin-top: 20px; padding: 15px; background: #ffeb3b; border-radius: 5px;">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .navbar {
+            background-color: #4CAF50;
+            overflow: hidden;
+            position: fixed;
+            top: 0;
+            width: 100%;
+            z-index: 1000;
+        }
+        .navbar a {
+            float: left;
+            display: block;
+            color: white;
+            text-align: center;
+            padding: 14px 16px;
+            text-decoration: none;
+            font-size: 17px;
+        }
+        .navbar a:hover {
+            background-color: #45a049;
+        }
+        body {
+            padding-top: 60px;
+        }
+    </style>
+</head>
+<body>
+    {% if 'username' in session %}
+    <div class="navbar">
+        <a href="{{ url_for('perfil') }}">Perfil</a>
+        <a href="{{ url_for('amigos') }}">Amigos</a>
+        <a href="{{ url_for('estudiar') }}">Estudiar</a>
+    </div>
+    {% endif %}
+</body>
+</html>

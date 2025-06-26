@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Lección {{ nivel }} - {{ leccion.titulo }}</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            line-height: 1.6;
+        }
+        .seccion {
+            margin-bottom: 30px;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .ejercicio {
+            margin: 15px 0;
+            padding: 15px;
+            background-color: #f9f9f9;
+            border-radius: 5px;
+            border-left: 4px solid #4CAF50;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        .completado {
+            color: #2196F3;
+            font-weight: bold;
+            padding: 15px;
+            text-align: center;
+            font-size: 18px;
+        }
+        textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-family: monospace;
+            margin-top: 10px;
+            min-height: 100px;
+        }
+        .requerido {
+            color: #e91e63;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    <h1>Lección {{ nivel }}: {{ leccion.titulo }}</h1>
+    
+    {% if nivel <= nivel_actual %}
+        <div class="completado">✓ ¡Ya has completado esta lección!</div>
+    {% else %}
+        <div class="seccion">
+            <h2>📚 Explicación</h2>
+            <p>{{ leccion.contenido.explicacion }}</p>
+            
+            {% if leccion.contenido.get('requiere') %}
+                <p><span class="requerido">Requerido:</span> 
+                {{ ", ".join(leccion.contenido.requiere) }}</p>
+            {% endif %}
+        </div>
+        
+        <div class="seccion">
+            <h2>📝 Evaluación</h2>
+            <form method="POST" action="{{ url_for('completar_leccion', nivel=nivel) }}">
+                {% for ejercicio in leccion.contenido.ejercicios_evaluacion %}
+                <div class="ejercicio">
+                    <h3>Ejercicio {{ loop.index }}</h3>
+                    <p>{{ ejercicio }}</p>
+                    <textarea name="respuesta_{{ loop.index }}" 
+                              placeholder="Escribe tu código aquí" 
+                              required></textarea>
+                </div>
+                {% endfor %}
+                <button type="submit">Enviar Evaluación</button>
+            </form>
+        </div>
+    {% endif %}
+</body>
+</html>

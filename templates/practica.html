@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Práctica - Nivel {{ nivel }}</title>
+    <style>
+        .ejercicio {
+            margin-bottom: 30px;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        textarea {
+            width: 100%;
+            min-height: 100px;
+            padding: 10px;
+        }
+        .btn-group {
+            margin-top: 20px;
+        }
+        .btn {
+            padding: 10px 20px;
+            margin-right: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            display: inline-block;
+        }
+        .btn-primary {
+            background: #4CAF50;
+            color: white;
+        }
+        .btn-secondary {
+            background: #f44336;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    {% include 'navbar.html' %}
+    
+    <div style="max-width: 800px; margin: 0 auto; padding: 20px;">
+        <h1>Ejercicios de Práctica - Nivel {{ nivel }}</h1>
+        
+        <form method="POST">
+            {% for ejercicio in leccion.contenido.ejercicios_practica %}
+            <div class="ejercicio">
+                <h3>Ejercicio {{ loop.index }}</h3>
+                <p>{{ ejercicio }}</p>
+                <textarea name="ejercicio_{{ loop.index }}" required></textarea>
+            </div>
+            {% endfor %}
+            
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">Verificar Respuestas</button>
+                <a href="{{ url_for('estudiar') }}" class="btn btn-secondary">Intentar Más Tarde</a>
+            </div>
+        </form>
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                <div style="margin-top: 20px; color: #f44336;">
+                    {{ messages[0] }}
+                </div>
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>
